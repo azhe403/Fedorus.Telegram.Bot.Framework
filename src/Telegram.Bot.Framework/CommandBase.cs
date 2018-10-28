@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -14,12 +13,11 @@ namespace Telegram.Bot.Framework.Abstractions
     /// </summary>
     public abstract class CommandBase : IUpdateHandler
     {
-        public abstract Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args,
-            CancellationToken cancellationToken);
+        public abstract Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args);
 
-        public Task HandleAsync(IUpdateContext context, UpdateDelegate next, CancellationToken cancellationToken)
+        public Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
-            return HandleAsync(context, next, ParseCommandArgs(context.Update.Message), cancellationToken);
+            return HandleAsync(context, next, ParseCommandArgs(context.Update.Message));
         }
 
         public static string[] ParseCommandArgs(Message message)
@@ -27,7 +25,7 @@ namespace Telegram.Bot.Framework.Abstractions
             if (message is null)
                 throw new ArgumentNullException(nameof(message));
             if (message.Entities?.FirstOrDefault()?.Type != MessageEntityType.BotCommand)
-                throw new ArgumentException("Message is not a command.", nameof(message));
+                throw new ArgumentException("Message is not a command", nameof(message));
 
             var argsList = new List<string>();
             string allArgs = message.Text.Substring(message.Entities[0].Length).TrimStart();
