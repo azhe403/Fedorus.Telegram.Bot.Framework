@@ -12,8 +12,7 @@ namespace Quickstart.AspNetCore.Handlers
         public override async Task HandleAsync(
             IUpdateContext context,
             UpdateDelegate next,
-            string[] args,
-            CancellationToken cancellationToken
+            string[] args
         )
         {
             Message msg = context.Update.Message;
@@ -25,8 +24,7 @@ namespace Quickstart.AspNetCore.Handlers
                 replyToMessageId: msg.MessageId,
                 replyMarkup: new InlineKeyboardMarkup(
                     InlineKeyboardButton.WithCallbackData("Ping", "PONG")
-                ),
-                cancellationToken: cancellationToken
+                )
             );
         }
     }

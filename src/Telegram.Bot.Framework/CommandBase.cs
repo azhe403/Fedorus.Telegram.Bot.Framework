@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -15,7 +16,7 @@ namespace Telegram.Bot.Framework.Abstractions
     {
         public abstract Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args);
 
-        public Task HandleAsync(IUpdateContext context, UpdateDelegate next)
+        public Task HandleAsync(IUpdateContext context, UpdateDelegate next, CancellationToken cancellationToken)
         {
             return HandleAsync(context, next, ParseCommandArgs(context.Update.Message));
         }

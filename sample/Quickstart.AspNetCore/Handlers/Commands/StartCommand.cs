@@ -9,17 +9,15 @@ namespace Quickstart.AspNetCore.Handlers
         public override async Task HandleAsync(
             IUpdateContext context,
             UpdateDelegate next,
-            string[] args,
-            CancellationToken cancellationToken
+            string[] args
         )
         {
             await context.Bot.Client.SendTextMessageAsync(
                 context.Update.Message.Chat,
-                "Hello, World!",
-                cancellationToken: cancellationToken
+                "Hello, World!"
             );
 
-            await next(context, cancellationToken);
+            await next(context);
         }
     }
 }
