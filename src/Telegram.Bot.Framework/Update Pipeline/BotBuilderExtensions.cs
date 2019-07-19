@@ -1,5 +1,6 @@
 ﻿using System;
 using Telegram.Bot.Framework.Abstractions;
+using Telegram.Bot.Framework.Pipeline;
 
 namespace Telegram.Bot.Framework
 {
@@ -11,33 +12,46 @@ namespace Telegram.Bot.Framework
             Action<IBotBuilder> configure
         )
         {
-            builder.Use(
-                next =>
-                    (context, cancellationToken) =>
-                    {
-                        if (predicate(context))
-                        {
-                            var branchBuilder = new BotBuilder();
-                            configure(branchBuilder);
-                            branchBuilder.Use(next);
-                            var branchDelegate = branchBuilder.Build();
+            var branchBuilder = new BotBuilder();
+            configure(branchBuilder);
+            UpdateDelegate branchDelegate = branchBuilder.Build();
 
-                            return branchDelegate(context, cancellationToken);
-                        }
+            builder.Use(new UseWhenMiddleware(predicate, branchDelegate));
 
-                        return next(context, cancellationToken);
-                    }
-            );
             return builder;
         }
 
-        public static IBotBuilder UseWhen<THandler>(
+        public static IBotBuilder UseWhen<THandler>( this IBotBuilder builder, Predicate<IUpdateContext> predicate)
+            where THandler : IUpdateHandler
+        {
+            var branchDelegate = new BotBuilder().Use<THandler>().Build();
+            builder.Use(new UseWhenMiddleware(predicate, branchDelegate));
+            return builder;
+        }
+
+        public static IBotBuilder MapWhen(
+             this IBotBuilder builder,
+             Predicate<IUpdateContext> predicate,
+             Action<IBotBuilder> configure
+         )
+        {
+            var mapBuilder = new BotBuilder();
+            configure(mapBuilder);
+            UpdateDelegate mapDelegate = mapBuilder.Build();
+
+            builder.Use(new MapWhenMiddleware(predicate, mapDelegate));
+
+            return builder;
+        }
+
+        public static IBotBuilder MapWhen<THandler>(
             this IBotBuilder builder,
             Predicate<IUpdateContext> predicate
         )
             where THandler : IUpdateHandler
         {
-            builder.UseWhen(predicate, botBuilder => botBuilder.Use<THandler>());
+            var branchDelegate = new BotBuilder().Use<THandler>().Build();
+            builder.Use(new MapWhenMiddleware(predicate, branchDelegate));
             return builder;
         }
 
@@ -47,7 +61,7 @@ namespace Telegram.Bot.Framework
         )
             where TCommand : CommandBase
             => builder
-                .UseWhen(
+                .MapWhen(
                     ctx => ctx.Bot.CanHandleCommand(command, ctx.Update.Message),
                     botBuilder => botBuilder.Use<TCommand>()
                 );
