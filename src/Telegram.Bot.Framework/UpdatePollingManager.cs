@@ -34,7 +34,7 @@ namespace Telegram.Bot.Framework
             await bot.Client.DeleteWebhookAsync(cancellationToken)
                 .ConfigureAwait(false);
 
-            requestParams = requestParams ?? new GetUpdatesRequest
+            requestParams ??= new GetUpdatesRequest
             {
                 Offset = 0,
                 Timeout = 500,

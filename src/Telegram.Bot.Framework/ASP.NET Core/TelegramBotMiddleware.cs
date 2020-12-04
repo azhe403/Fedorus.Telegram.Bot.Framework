@@ -18,6 +18,7 @@ namespace Telegram.Bot.Framework
         private readonly RequestDelegate _next;
 
         private readonly UpdateDelegate _updateDelegate;
+        private readonly IServiceProvider _serviceProvider;
 
         private readonly ILogger<TelegramBotMiddleware<TBot>> _logger;
 
@@ -29,11 +30,13 @@ namespace Telegram.Bot.Framework
         public TelegramBotMiddleware(
             RequestDelegate next,
             UpdateDelegate updateDelegate,
+            IServiceProvider serviceProvider,
             ILogger<TelegramBotMiddleware<TBot>> logger
         )
         {
             _next = next;
             _updateDelegate = updateDelegate;
+            _serviceProvider = serviceProvider;
             _logger = logger;
         }
 
@@ -77,7 +80,7 @@ namespace Telegram.Bot.Framework
                 return;
             }
 
-            using (var scope = context.RequestServices.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var bot = scope.ServiceProvider.GetRequiredService<TBot>();
                 var updateContext = new UpdateContext(bot, update, scope.ServiceProvider);

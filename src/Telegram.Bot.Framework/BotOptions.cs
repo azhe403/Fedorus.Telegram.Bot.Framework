@@ -16,6 +16,7 @@ namespace Telegram.Bot.Framework
         /// </summary>
         public string ApiToken { get; set; }
 
+        public string WebhookDomain { get; set; }
         public string WebhookPath { get; set; }
     }
 }

@@ -17,6 +17,8 @@ namespace Quickstart.AspNetCore
                     .AddJsonFile("appsettings.json")
                     .AddJsonFile($"appsettings.{hostBuilder.HostingEnvironment.EnvironmentName}.json", true)
                     .AddJsonEnvVar("QUICKSTART_SETTINGS", true)
-                ).UseStartup<Startup>();
+                )
+                .UseUrls("http://*:10000")
+                .UseStartup<Startup>();
     }
 }

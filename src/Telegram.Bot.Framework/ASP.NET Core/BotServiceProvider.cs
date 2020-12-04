@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Framework.Abstractions;
 
-namespace Quickstart.AspNetCore.Services
+namespace Telegram.Bot.Framework.ASP.NET_Core
 {
-    internal class BotServiceProvider : IBotServiceProvider
+    /// <inheritdoc />
+    public class BotServiceProvider : IBotServiceProvider
     {
         private readonly IServiceProvider _container;
 
@@ -14,6 +15,11 @@ namespace Quickstart.AspNetCore.Services
         public BotServiceProvider(IApplicationBuilder app)
         {
             _container = app.ApplicationServices;
+        }
+
+        public BotServiceProvider(IServiceProvider provider)
+        {
+            _container = provider;
         }
 
         public BotServiceProvider(IServiceScope scope)

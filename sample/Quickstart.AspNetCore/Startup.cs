@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quickstart.AspNetCore.Handlers;
-using Quickstart.AspNetCore.Options;
 using Quickstart.AspNetCore.Services;
 using System;
 using Telegram.Bot.Framework;
 using Telegram.Bot.Framework.Abstractions;
+using Telegram.Bot.Framework.Extensions;
 
 namespace Quickstart.AspNetCore
 {
@@ -25,7 +25,6 @@ namespace Quickstart.AspNetCore
         {
             services.AddTransient<EchoBot>()
                 .Configure<BotOptions<EchoBot>>(Configuration.GetSection("EchoBot"))
-                .Configure<CustomBotOptions<EchoBot>>(Configuration.GetSection("EchoBot"))
                 .AddScoped<TextEchoer>()
                 .AddScoped<PingCommand>()
                 .AddScoped<StartCommand>()
@@ -36,12 +35,14 @@ namespace Quickstart.AspNetCore
                 .AddScoped<UpdateMembersList>()
                 .AddScoped<CallbackQueryHandler>()
                 ;
+            services.AddTransient<OnlineCourcesBot>()
+                .Configure<BotOptions<OnlineCourcesBot>>(Configuration.GetSection("OnlineCourcesBot"));
             services.AddScoped<IWeatherService, WeatherService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            //if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
 
@@ -49,11 +50,15 @@ namespace Quickstart.AspNetCore
                 // this will disable Telegram webhooks
                 app.UseTelegramBotLongPolling<EchoBot>(ConfigureBot(), startAfter: TimeSpan.FromSeconds(2));
             }
-            else
+            //else
             {
+                ServiceCollection services = new ServiceCollection();
+                services.AddSingleton(app.ApplicationServices.GetService<EchoBot>());
                 // use Telegram bot webhook middleware in higher environments
+                app.UseTelegramBotWebhook<OnlineCourcesBot>(ConfigureBot());
                 app.UseTelegramBotWebhook<EchoBot>(ConfigureBot());
                 // and make sure webhook is enabled
+                app.EnsureWebhookSet<OnlineCourcesBot>();
                 app.EnsureWebhookSet<EchoBot>();
             }
 
