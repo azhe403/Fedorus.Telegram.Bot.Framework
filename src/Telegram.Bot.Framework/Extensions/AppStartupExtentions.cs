@@ -40,20 +40,21 @@ namespace Telegram.Bot.Framework.Extensions
                 .ContinueWith(t =>
                 {// ToDo use logger
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(t.Exception);
+                    Console.WriteLine($"Connection error {DateTime.Now}");
+                    Console.WriteLine(t.Exception.Message);
                     Console.ResetColor();
-                    throw t.Exception;
+                    //throw t.Exception;
                 }, TaskContinuationOptions.OnlyOnFaulted);
 
             return app;
         }
 
-        public static IApplicationBuilder EnsureWebhookSet<TBot>(
-            this IApplicationBuilder app
+        public static void EnsureWebhookSet<TBot>(
+            this IServiceProvider app
         )
             where TBot : IBot
         {
-            using (var scope = app.ApplicationServices.CreateScope())
+            using (var scope = app.CreateScope())
             {
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<TBot>>();
                 var bot = scope.ServiceProvider.GetRequiredService<TBot>();
@@ -65,8 +66,6 @@ namespace Telegram.Bot.Framework.Extensions
                 bot.Client.SetWebhookAsync(url.AbsoluteUri)
                     .GetAwaiter().GetResult();
             }
-
-            return app;
         }
     }
 }

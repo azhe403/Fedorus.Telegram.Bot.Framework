@@ -20,7 +20,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <param name="app">Instance of IApplicationBuilder</param>
         /// <param name="ensureWebhookEnabled">Whether to set the webhook immediately by making a request to Telegram bot API</param>
         /// <returns>Instance of IApplicationBuilder</returns>
-        public static IApplicationBuilder UseTelegramBotWebhook<TBot>(
+        public static IServiceProvider UseTelegramBotWebhook<TBot>(
             this IApplicationBuilder app,
             IBotBuilder botBuilder,
             IServiceProvider serviceProvider = default
@@ -36,7 +36,7 @@ namespace Microsoft.AspNetCore.Builder
                 builder => builder.UseMiddleware<TelegramBotMiddleware<TBot>>(updateDelegate, serviceProvider)
             );
 
-            return app;
+            return serviceProvider ?? app.ApplicationServices;
         }
 
         ///// <summary>

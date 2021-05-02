@@ -10,6 +10,7 @@ using Telegram.Bot.Framework;
 using Telegram.Bot.Framework.Abstractions;
 using Telegram.Bot.Framework.Extensions;
 
+
 namespace Quickstart.AspNetCore
 {
     public class Startup
@@ -58,8 +59,8 @@ namespace Quickstart.AspNetCore
                 app.UseTelegramBotWebhook<OnlineCourcesBot>(ConfigureBot());
                 app.UseTelegramBotWebhook<EchoBot>(ConfigureBot());
                 // and make sure webhook is enabled
-                app.EnsureWebhookSet<OnlineCourcesBot>();
-                app.EnsureWebhookSet<EchoBot>();
+                app.ApplicationServices.EnsureWebhookSet<OnlineCourcesBot>();
+                app.ApplicationServices.EnsureWebhookSet<EchoBot>();
             }
 
             app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });

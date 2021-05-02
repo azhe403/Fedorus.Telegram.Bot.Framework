@@ -1,3 +1,5 @@
+using System;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
@@ -43,25 +45,32 @@ namespace Telegram.Bot.Framework
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                Update[] updates = await bot.Client.MakeRequestAsync(
-                    requestParams,
-                    cancellationToken
-                ).ConfigureAwait(false);
-
-                foreach (var update in updates)
+                try
                 {
-                    using (var scopeProvider = _rootProvider.CreateScope())
+                    Update[] updates = await bot.Client.MakeRequestAsync(
+                        requestParams,
+                        cancellationToken
+                    ).ConfigureAwait(false);
+
+                    foreach (var update in updates)
                     {
-                        var context = new UpdateContext(bot, update, scopeProvider);
-                        // ToDo deep clone bot instance for each update
-                        await _updateDelegate(context)
-                            .ConfigureAwait(false);
+                        using (var scopeProvider = _rootProvider.CreateScope())
+                        {
+                            var context = new UpdateContext(bot, update, scopeProvider);
+                            // ToDo deep clone bot instance for each update
+                            await _updateDelegate(context)
+                                .ConfigureAwait(false);
+                        }
+                    }
+
+                    if (updates.Length > 0)
+                    {
+                        requestParams.Offset = updates[updates.Length - 1].Id + 1;
                     }
                 }
-
-                if (updates.Length > 0)
+                catch (Exception e)
                 {
-                    requestParams.Offset = updates[updates.Length - 1].Id + 1;
+                    Console.WriteLine(e);
                 }
             }
 
