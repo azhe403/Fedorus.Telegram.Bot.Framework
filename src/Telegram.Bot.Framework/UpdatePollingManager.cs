@@ -33,7 +33,7 @@ namespace Telegram.Bot.Framework
         {
             var bot = (TBot)_rootProvider.GetService(typeof(TBot));
 
-            await bot.Client.DeleteWebhookAsync(cancellationToken)
+            await bot.Client.DeleteWebhookAsync(cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             requestParams ??= new GetUpdatesRequest

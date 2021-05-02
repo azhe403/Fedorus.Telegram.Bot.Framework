@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>Fedorus.Telegram.Bot.Framework</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
 
     <LangVersion>latest</LangVersion>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Telegram.Bot" Version="14.10.0" />
+    <PackageReference Include="Telegram.Bot" Version="16.0.0-alpha.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
