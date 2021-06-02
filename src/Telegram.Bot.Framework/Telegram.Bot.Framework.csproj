@@ -18,17 +18,15 @@
     <RepositoryUrl>https://github.com/Fedorus/Telegram.Bot.Framework.git</RepositoryUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/TelegramBots/Telegram.Bot.Framework/master/docs/icon.png</PackageIconUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/TelegramBots/Telegram.Bot.Framework/master/LICENSE</PackageLicenseUrl>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Telegram.Bot" Version="16.0.0-alpha.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
+    <PackageReference Include="Telegram.Bot" Version="16.0.0-alpha.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -71,8 +71,6 @@ namespace Quickstart.AspNetCore
             return new BotBuilder()
                     .Use<ExceptionHandler>()
                     .Use<UpdateLogger>()
-
-                    // .Use<CustomUpdateLogger>()
                     .UseWhen<UpdateMembersList>(When.MembersChanged)
                     .UseWhen(When.NewMessage, msgBranch => msgBranch
                         .UseWhen(When.NewTextMessage, txtBranch => txtBranch
@@ -81,14 +79,12 @@ namespace Quickstart.AspNetCore
                                     .UseCommand<PingCommand>("ping")
                                     .UseCommand<StartCommand>("start")
                                 )
-                            //.Use<NLP>()
                         )
                         .UseWhen<StickerHandler>(When.StickerMessage)
                         .UseWhen<WeatherReporter>(When.LocationMessage)
                     )
                     .UseWhen<CallbackQueryHandler>(When.CallbackQuery)
 
-                // .Use<UnhandledUpdateReporter>()
                 ;
         }
     }
