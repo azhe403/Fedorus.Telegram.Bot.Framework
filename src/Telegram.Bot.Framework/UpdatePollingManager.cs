@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
@@ -40,7 +41,7 @@ namespace Telegram.Bot.Framework
             {
                 Offset = 0,
                 Timeout = 500,
-                AllowedUpdates = new UpdateType[0],
+                AllowedUpdates = Array.Empty<UpdateType>(),
             };
 
             while (!cancellationToken.IsCancellationRequested)
@@ -54,13 +55,11 @@ namespace Telegram.Bot.Framework
 
                     foreach (var update in updates)
                     {
-                        using (var scopeProvider = _rootProvider.CreateScope())
-                        {
-                            var context = new UpdateContext(bot, update, scopeProvider);
-                            // ToDo deep clone bot instance for each update
-                            await _updateDelegate(context)
-                                .ConfigureAwait(false);
-                        }
+                        using var scopeProvider = _rootProvider.CreateScope();
+                        var context = new UpdateContext(bot, update, scopeProvider);
+                        // ToDo deep clone bot instance for each update
+                        await _updateDelegate(context, cancellationToken)
+                            .ConfigureAwait(false);
                     }
 
                     if (updates.Length > 0)
@@ -68,9 +67,13 @@ namespace Telegram.Bot.Framework
                         requestParams.Offset = updates[updates.Length - 1].Id + 1;
                     }
                 }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"[{DateTime.Now}] {e.Message}");
+                }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    Console.WriteLine($"[{DateTime.Now}] {e}");
                 }
             }
 

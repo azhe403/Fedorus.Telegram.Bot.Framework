@@ -84,7 +84,6 @@ namespace Quickstart.AspNetCore
                         .UseWhen<WeatherReporter>(When.LocationMessage)
                     )
                     .UseWhen<CallbackQueryHandler>(When.CallbackQuery)
-
                 ;
         }
     }

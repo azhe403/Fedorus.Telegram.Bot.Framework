@@ -18,7 +18,6 @@ namespace Quickstart.AspNetCore.Handlers
         public async Task HandleAsync(IUpdateContext context, UpdateDelegate next, CancellationToken cancellationToken)
         {
             var u = context.Update;
-
             try
             {
                 await next(context, cancellationToken);
