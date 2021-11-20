@@ -17,7 +17,7 @@ namespace Quickstart.AspNetCore.Services
             };
         }
 
-        public async Task<CurrentWeather> GetWeatherAsync(float lat, float lon)
+        public async Task<CurrentWeather> GetWeatherAsync(double lat, double lon)
         {
             string location = await FindLocationIdAsync(lat, lon)
                 .ConfigureAwait(false);
@@ -38,7 +38,7 @@ namespace Quickstart.AspNetCore.Services
             };
         }
 
-        private async Task<string> FindLocationIdAsync(float lat, float lon)
+        private async Task<string> FindLocationIdAsync(double lat, double lon)
         {
             string json = await _client.GetStringAsync($"location/search?lattlong={lat},{lon}")
                 .ConfigureAwait(false);

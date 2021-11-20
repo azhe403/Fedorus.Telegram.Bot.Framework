@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>Fedorus.Telegram.Bot.Framework</PackageId>
-    <PackageVersion>1.0.2</PackageVersion>
+    <PackageVersion>1.0.3</PackageVersion>
 
     <LangVersion>latest</LangVersion>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -26,7 +26,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
-    <PackageReference Include="Telegram.Bot" Version="16.0.0-alpha.2" />
+    <PackageReference Include="Telegram.Bot" Version="17.0.0" />
   </ItemGroup>
 
   <ItemGroup>

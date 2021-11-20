@@ -4,6 +4,6 @@ namespace Quickstart.AspNetCore.Services
 {
     interface IWeatherService
     {
-        Task<CurrentWeather> GetWeatherAsync(float lat, float lon);
+        Task<CurrentWeather> GetWeatherAsync(double lat, double lon);
     }
 }
