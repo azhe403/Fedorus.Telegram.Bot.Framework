@@ -13,5 +13,7 @@
         string ApiToken { get; }
 
         string WebhookPath { get; }
+
+        string CustomBotServer { get; set; }
     }
 }

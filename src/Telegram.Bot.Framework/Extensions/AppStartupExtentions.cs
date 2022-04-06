@@ -26,12 +26,12 @@ namespace Telegram.Bot.Framework.Extensions
                 startAfter = TimeSpan.FromSeconds(2);
             }
 
-            UpdatePollingManager<TBot> updateManager; 
+            UpdatePollingManager<TBot> updateManager;
 
-            updateManager = serviceProvider == default ? 
-                new UpdatePollingManager<TBot>(botBuilder, new BotServiceProvider(app)) 
+            updateManager = serviceProvider == default ?
+                new UpdatePollingManager<TBot>(botBuilder, new BotServiceProvider(app))
                 : new UpdatePollingManager<TBot>(botBuilder, new BotServiceProvider(serviceProvider));
-            
+
             Task.Run(async () =>
                 {
                     await Task.Delay(startAfter, cancellationToken);
@@ -63,8 +63,8 @@ namespace Telegram.Bot.Framework.Extensions
 
                 logger.LogInformation("Setting webhook for bot \"{0}\" to URL \"{1}\"", typeof(TBot).Name, url);
 
-                bot.Client.SetWebhookAsync(url.AbsoluteUri)
-                    .GetAwaiter().GetResult();
+                bot.Client.DeleteWebhookAsync().GetAwaiter().GetResult();
+                bot.Client.SetWebhookAsync(url.AbsoluteUri).GetAwaiter().GetResult();
             }
         }
     }

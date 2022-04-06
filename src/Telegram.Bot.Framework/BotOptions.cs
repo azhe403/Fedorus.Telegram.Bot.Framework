@@ -18,5 +18,7 @@ namespace Telegram.Bot.Framework
 
         public string WebhookDomain { get; set; }
         public string WebhookPath { get; set; }
+
+        public string CustomBotServer { get; set; }
     }
 }
